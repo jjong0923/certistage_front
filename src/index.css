@@ -6,50 +6,78 @@
 div.react-calendar {
   @apply w-[600px] rounded-3xl bg-[#E7F0FF] p-6 shadow-lg;
   font-family: sans-serif;
+
+  height: 520px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 요일 헤더 */
 div .react-calendar__month-view__weekdays {
-  @apply mb-2 text-center text-sm font-semibold text-gray-700;
+  @apply text-center text-sm font-semibold text-gray-700;
+  border-bottom: 1px solid #afafaf;
+  height: 40px;
+  display: flex;
+  align-items: center;
 }
 
 div .react-calendar__month-view__weekdays__weekday {
-  @apply p-2;
-  border-bottom: 1px solid #afafaf;
+  @apply p-0;
 }
 
-div .react-calendar__month-view__weekdays__weekday abbr {
-  @apply no-underline;
-  text-decoration: none;
+/* 날짜 그리드 */
+div .react-calendar__month-view__days {
+  flex: 1;
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 0;
+  /* border: 1px solid #d9d9d9; */
 }
 
 /* 날짜 셀 */
 div .react-calendar__tile {
-  @apply rounded-xl p-2 text-center transition hover:bg-blue-100;
+  @apply text-center transition hover:bg-blue-100;
+
+  border: 1px solid #d9d9d9;
+  height: 62px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  padding-top: 0.5rem;
+  margin: 0;
 }
 
 /* 오늘 날짜 */
 div .react-calendar__tile--now {
-  @apply bg-blue-200 font-bold text-blue-700;
+  background: none !important;
+}
+div .react-calendar__tile--now abbr {
   background: #bfdbfe;
+  color: #1d4ed8;
+  font-weight: bold;
+
+  padding: 4px 4px;
+  border-radius: 50%;
 }
 
 /* 선택된 날짜 */
-div .react-calendar__tile--active {
-  @apply bg-blue-500 text-white;
-  background: #3b82f6;
-}
+/* div .react-calendar__tile--active {
+} */
 
 /* 네비게이션 */
 div .react-calendar__navigation {
   @apply mb-4 flex items-center justify-between;
+  height: 40px;
 }
 
+/* 네비게이션 버튼 */
 div .react-calendar__navigation button {
   @apply rounded-full p-2 text-lg hover:bg-gray-200;
 }
 
-/* 주말 빨간색 제거 (추가 요청 사항 반영) */
+/* 주말 빨간색 제거 */
 div .react-calendar__month-view__days__day--weekend {
   @apply text-gray-700;
 }

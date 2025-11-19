@@ -18,7 +18,6 @@ interface CertificationCardProps {
 }
 
 function CertificationCard({ data }: CertificationCardProps) {
-  const caterogries = ["pro", "tech"];
   const categoryName: Record<categoryType, string> = {
     pro: "전문 자격",
     tech: "기술 자격",
@@ -26,7 +25,7 @@ function CertificationCard({ data }: CertificationCardProps) {
   return (
     <div className="flex flex-col gap-3 border-b-2 border-[#d9d9d9] pb-4">
       <h3 className="text-2xl font-semibold text-[#0F172A]">{data.date}</h3>
-      {["pro", "tech"].map((type) => {
+      {(["pro", "tech"] as const).map((type) => {
         const filtered = data.items.filter((i) => i.category === type);
         if (!filtered.length) return null;
 
