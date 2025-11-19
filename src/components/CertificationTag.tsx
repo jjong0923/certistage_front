@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 
-
 interface CertificationTagProps {
   children: ReactNode;
   color: string;

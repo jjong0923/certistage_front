@@ -1,1 +1,69 @@
+/* index.css */
 @import "tailwindcss";
+
+/* 캘린더 */
+/* 전체 박스 */
+div.react-calendar {
+  @apply w-[600px] rounded-3xl bg-[#E7F0FF] p-6 shadow-lg;
+  font-family: sans-serif;
+}
+
+/* 요일 헤더 */
+div .react-calendar__month-view__weekdays {
+  @apply mb-2 text-center text-sm font-semibold text-gray-700;
+}
+
+div .react-calendar__month-view__weekdays__weekday {
+  @apply p-2;
+  border-bottom: 1px solid #afafaf;
+}
+
+div .react-calendar__month-view__weekdays__weekday abbr {
+  @apply no-underline;
+  text-decoration: none;
+}
+
+/* 날짜 셀 */
+div .react-calendar__tile {
+  @apply rounded-xl p-2 text-center transition hover:bg-blue-100;
+}
+
+/* 오늘 날짜 */
+div .react-calendar__tile--now {
+  @apply bg-blue-200 font-bold text-blue-700;
+  background: #bfdbfe;
+}
+
+/* 선택된 날짜 */
+div .react-calendar__tile--active {
+  @apply bg-blue-500 text-white;
+  background: #3b82f6;
+}
+
+/* 네비게이션 */
+div .react-calendar__navigation {
+  @apply mb-4 flex items-center justify-between;
+}
+
+div .react-calendar__navigation button {
+  @apply rounded-full p-2 text-lg hover:bg-gray-200;
+}
+
+/* 주말 빨간색 제거 (추가 요청 사항 반영) */
+div .react-calendar__month-view__days__day--weekend {
+  @apply text-gray-700;
+}
+
+div .react-calendar__month-view__days__day--neighboringMonth {
+  @apply text-gray-300;
+}
+
+/* 스크롤바 */
+.scroll-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-hide {
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
+}
