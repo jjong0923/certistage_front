@@ -16,7 +16,7 @@ div.react-calendar {
 div .react-calendar__month-view__weekdays {
   @apply text-center text-sm font-semibold text-gray-700;
   border-bottom: 1px solid #afafaf;
-  height: 40px;
+  height: 48px;
   display: flex;
   align-items: center;
 }
@@ -32,14 +32,15 @@ div .react-calendar__month-view__days {
   grid-template-columns: repeat(7, 1fr);
   grid-auto-rows: 1fr;
   gap: 0;
-  /* border: 1px solid #d9d9d9; */
+
+  /* border-right: 1px solid #d0d0d0; */
+  /* border-bottom: 1px solid #d0d0d0; */
 }
 
 /* 날짜 셀 */
 div .react-calendar__tile {
   @apply text-center transition hover:bg-blue-100;
 
-  border: 1px solid #d9d9d9;
   height: 62px;
   display: flex;
   justify-content: center;
@@ -64,6 +65,12 @@ div .react-calendar__tile--now abbr {
 
 /* 선택된 날짜 */
 /* div .react-calendar__tile--active {
+  background: #bfdbfe;
+  color: #1d4ed8;
+  font-weight: bold;
+
+  padding: 4px 4px;
+  border-radius: 50%;
 } */
 
 /* 네비게이션 */
@@ -73,7 +80,16 @@ div .react-calendar__navigation {
 }
 
 /* 네비게이션 버튼 */
+div .react-calendar__navigation button.react-calendar__navigation__label {
+  background: none !important;
+  box-shadow: none;
+}
+
+div .react-calendar__navigation button.react-calendar__navigation__label:hover {
+  background: none !important;
+}
 div .react-calendar__navigation button {
+  background: #e5e7eb;
   @apply rounded-full p-2 text-lg hover:bg-gray-200;
 }
 

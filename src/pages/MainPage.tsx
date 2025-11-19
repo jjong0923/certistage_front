@@ -75,9 +75,9 @@ function MainPage() {
   ];
 
   return (
-    <div className="mt-40 flex items-center justify-center gap-12">
+    <div className="mt-40 flex items-center justify-center">
       <Calendar />
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 p-8">
         <div className="flex gap-6">
           <div className="flex flex-col">
             <p className="text-xm text-center font-semibold text-[#adadad]">
@@ -92,9 +92,11 @@ function MainPage() {
             <div className="h-[20px] w-[84px] rounded-lg border-2 border-[#FF8FB8] bg-[#FFF4F8]"></div>
           </div>
         </div>
-        {mockExams.map((item) => (
-          <CertificationCard data={item} />
-        ))}
+        <div className="min-h-[440px]">
+          {mockExams.map((item) => (
+            <CertificationCard data={item} />
+          ))}
+        </div>
       </div>
     </div>
   );
