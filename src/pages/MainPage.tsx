@@ -1,5 +1,6 @@
 import Calendar from "../components/Calendar";
 import CertificationCard from "../components/CertificationCard";
+import CertificationTitle from "../components/CertificationTitle";
 
 interface ExamItem {
   category: "pro" | "tech";
@@ -77,22 +78,12 @@ function MainPage() {
   return (
     <div className="mt-40 flex items-center justify-center">
       <Calendar />
-      <div className="flex flex-col gap-6 p-8">
+      <div className="max-w[584px] flex flex-col gap-6 p-8">
         <div className="flex gap-6">
-          <div className="flex flex-col">
-            <p className="text-xm text-center font-semibold text-[#adadad]">
-              기술 자격
-            </p>
-            <div className="h-[20px] w-[84px] rounded-lg border-2 border-[#4D9FFF] bg-[#EEF6FF]"></div>
-          </div>
-          <div className="flex flex-col">
-            <p className="text-xm text-center font-semibold text-[#adadad]">
-              전문 자격
-            </p>
-            <div className="h-[20px] w-[84px] rounded-lg border-2 border-[#FF8FB8] bg-[#FFF4F8]"></div>
-          </div>
+          <CertificationTitle type="pro" />
+          <CertificationTitle type="tech" />
         </div>
-        <div className="min-h-[440px]">
+        <div className="flex min-h-[420px] flex-col gap-6">
           {mockExams.map((item) => (
             <CertificationCard data={item} />
           ))}
