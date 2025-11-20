@@ -1,6 +1,11 @@
-import Calendar from "../components/Calendar";
-import CertificationCard from "../components/CertificationCard";
-import CertificationTitle from "../components/CertificationTitle";
+import Calendar from "../Calendar/Calendar";
+import CertificationCard from "../Certification/CertificationCard";
+import CertificationTitle from "../Certification/CertificationTitle";
+import Header from "../Shared/Hedaer";
+import { useState } from "react";
+import ChatBot from "../ChatBot/ChatBot";
+import BookReccomend from "../Book/BookReccomend";
+import FloatingButton from "../Shared/FloatingButton";
 
 interface ExamItem {
   category: "pro" | "tech";
@@ -13,6 +18,7 @@ interface DailyExams {
 }
 
 function MainPage() {
+  const [toggle, setToggle] = useState(true);
   const mockExams: DailyExams[] = [
     {
       date: "11.16(토)",
@@ -76,19 +82,46 @@ function MainPage() {
   ];
 
   return (
-    <div className="mt-40 flex items-center justify-center">
-      <Calendar />
-      <div className="max-w[584px] flex flex-col gap-6 p-8">
-        <div className="flex gap-6">
-          <CertificationTitle type="pro" />
-          <CertificationTitle type="tech" />
-        </div>
-        <div className="flex min-h-[420px] flex-col gap-6">
-          {mockExams.map((item) => (
-            <CertificationCard data={item} />
-          ))}
+    <div>
+      <Header />
+      <div className="mt-10 flex justify-center">
+        <select
+          name="major"
+          defaultValue=""
+          className="h-[40px] w-[650px] rounded border border-[#023685] pl-[30px]"
+        >
+          <option value="" disabled>
+            전공을 선택해주세요
+          </option>
+          <option value="컴퓨터공학과">컴퓨터공학과</option>
+          <option value="경영학과">경영학과</option>
+        </select>
+      </div>
+      {/* 콘텐츠 */}
+      <div className="mt-8 flex items-center justify-center">
+        {/* <Calendar />
+        <ChatBot /> */}
+        {toggle ? <Calendar /> : <ChatBot onClose={() => setToggle(true)} />}
+        <div className="max-w[584px] flex flex-col gap-6 p-8">
+          <div className="flex gap-6">
+            <CertificationTitle type="pro" />
+            <CertificationTitle type="tech" />
+          </div>
+          <div className="flex min-h-[420px] flex-col gap-6">
+            {mockExams.map((item) => (
+              <CertificationCard data={item} />
+            ))}
+          </div>
         </div>
       </div>
+      {/* 챗봇 토글 */}
+      <FloatingButton
+        onClick={() => {
+          setToggle(false);
+        }}
+      />
+      {/* 교재 추천 */}
+      <BookReccomend />
     </div>
   );
 }
