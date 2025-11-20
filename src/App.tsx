@@ -1,14 +1,29 @@
 import "./App.css";
-
+import BookReccomend from "./Book/BookReccomend";
+import ChatBot from "./ChatBot/ChatBot";
+import { useState } from "react";
 function App() {
+  const [showChat, setShowChat] = useState(true);
+
   return (
     <>
+      <header className="bg-[#023685] h-[105px] flex justify-center items-center ">
+        <img
+          src="src\images\certistageLogo.png"
+          alt="logo"
+          className=" h-[110px]"
+        />
+      </header>
+      <select name="major" defaultValue="" className="w-[650px] h-[40px] ml-[250px] mt-[30px] pl-[30px] border border-[#023685] rounded">
+        <option value="" disabled>전공을 선택해주세요</option>
+        <option value="컴퓨터공학과">컴퓨터공학과</option>
+        <option value="경영학과">경영학과</option>
+      </select >
       <div>
-        <h1 className="text-3xl font-bold text-amber-600 underline">간지톤</h1>
+        {showChat && (<ChatBot onClose={() => setShowChat(false)} />
+        )}
       </div>
-      <div className="h-10 w-12 bg-gray-400 text-white"></div>
-      <div className="flex bg-red-500 p-2 text-sm text-white">Test</div>
-      <h1 className="text-3xl font-bold text-amber-600 underline">텍스트</h1>
+      <BookReccomend />
     </>
   );
 }
