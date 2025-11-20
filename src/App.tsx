@@ -1,11 +1,21 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import MainPage from "./pages/MainPage";
 import BookReccomend from "./Book/BookReccomend";
 import ChatBot from "./ChatBot/ChatBot";
 import { useState } from "react";
+
 function App() {
   const [showChat, setShowChat] = useState(true);
 
   return (
+
+//    <BrowserRouter>
+//      <Routes>
+//        <Route path="/" element={<MainPage />} />
+//      </Routes>
+//    </BrowserRouter>
+
     <>
       <header className="bg-[#023685] h-[105px] flex justify-center items-center ">
         <img
@@ -25,6 +35,7 @@ function App() {
       </div>
       <BookReccomend />
     </>
+
   );
 }
 
