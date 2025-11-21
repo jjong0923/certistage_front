@@ -83,12 +83,16 @@ function MainPage() {
   ];
 
   useEffect(() => {
-    try {
-      const data = getMajor();
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
+    const fetchData = async () => {
+      try {
+        const data = await getMajor();
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (

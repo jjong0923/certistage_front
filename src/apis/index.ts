@@ -12,7 +12,7 @@ export const api = axios.create({
 
 // 전공 목록 조회
 export const getMajor = async () => {
-  const res = await api.get("api/major");
+  const res = await api.get("api/majors");
   return res.data;
 };
 
