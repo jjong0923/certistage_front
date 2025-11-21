@@ -2,10 +2,11 @@ import Calendar from "../Calendar/Calendar";
 import CertificationCard from "../Certification/CertificationCard";
 import CertificationTitle from "../Certification/CertificationTitle";
 import Header from "../Shared/Hedaer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChatBot from "../ChatBot/ChatBot";
 import BookReccomend from "../Book/BookReccomend";
 import FloatingButton from "../Shared/FloatingButton";
+import { getMajor } from "../apis";
 
 interface ExamItem {
   category: "pro" | "tech";
@@ -80,6 +81,15 @@ function MainPage() {
       ],
     },
   ];
+
+  useEffect(() => {
+    try {
+      const data = getMajor();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   return (
     <div>
