@@ -7,7 +7,7 @@ interface FloatingButtonProps {
 function FloatingButton({ onClick }: FloatingButtonProps) {
   return (
     <div
-      className="absolute right-22 z-1 flex h-[90px] w-[90px] cursor-pointer items-center justify-center rounded-[50%] bg-[#E8F1FF]"
+      className="fixed right-22 bottom-20 z-1 flex h-[90px] w-[90px] cursor-pointer items-center justify-center rounded-[50%] bg-[#E8F1FF]"
       onClick={onClick}
     >
       <img src={icon} className="w-[68px]"></img>

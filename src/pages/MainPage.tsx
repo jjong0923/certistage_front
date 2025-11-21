@@ -2,10 +2,11 @@ import Calendar from "../Calendar/Calendar";
 import CertificationCard from "../Certification/CertificationCard";
 import CertificationTitle from "../Certification/CertificationTitle";
 import Header from "../Shared/Hedaer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChatBot from "../ChatBot/ChatBot";
 import BookReccomend from "../Book/BookReccomend";
 import FloatingButton from "../Shared/FloatingButton";
+import { getMajor } from "../apis";
 
 interface ExamItem {
   category: "pro" | "tech";
@@ -81,14 +82,23 @@ function MainPage() {
     },
   ];
 
+  useEffect(() => {
+    try {
+      const data = getMajor();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return (
     <div>
       <Header />
-      <div className="mt-10 flex justify-center">
+      <div className="relative mt-10 flex justify-center">
         <select
           name="major"
           defaultValue=""
-          className="h-[40px] w-[650px] rounded border border-[#023685] pl-[30px]"
+          className="h-10 w-[650px] rounded border border-[#023685] pl-[30px]"
         >
           <option value="" disabled>
             전공을 선택해주세요
@@ -99,9 +109,14 @@ function MainPage() {
       </div>
       {/* 콘텐츠 */}
       <div className="mt-8 flex items-center justify-center">
-        {/* <Calendar />
-        <ChatBot /> */}
-        {toggle ? <Calendar /> : <ChatBot onClose={() => setToggle(true)} />}
+        {toggle ? (
+          <Calendar />
+        ) : (
+          <div className="p-8">
+            <ChatBot onClose={() => setToggle(true)} />
+          </div>
+        )}
+        {/* 자격증 리스트 */}
         <div className="max-w[584px] flex flex-col gap-6 p-8">
           <div className="flex gap-6">
             <CertificationTitle type="pro" />
@@ -117,7 +132,7 @@ function MainPage() {
       {/* 챗봇 토글 */}
       <FloatingButton
         onClick={() => {
-          setToggle(false);
+          setToggle(!toggle);
         }}
       />
       {/* 교재 추천 */}
