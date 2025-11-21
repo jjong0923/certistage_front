@@ -3,14 +3,18 @@
 
 /* 캘린더 */
 /* 전체 박스 */
-div.react-calendar {
-  @apply w-[600px] rounded-3xl bg-[#E7F0FF] p-6 shadow-lg;
+div .react-calendar {
+  @apply w-[550px] rounded-3xl bg-[#E7F0FF] p-6 shadow-lg;
   font-family: sans-serif;
 
   max-width: 550px;
   height: 520px;
+
   display: flex;
   flex-direction: column;
+
+  border: none;
+  box-shadow: 0_4px_5px_2px_rgba (0, 0, 0, 0.15);
 }
 
 /* 요일 헤더 */

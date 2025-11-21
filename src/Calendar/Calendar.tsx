@@ -8,7 +8,7 @@ function MyCalendar() {
   return (
     <div className="flex justify-center p-8">
       <Calendar
-        onChange={setValue}
+        // onChange={setValue}
         value={value}
         locale="en-US"
         // calendarType="US"
