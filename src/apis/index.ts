@@ -17,10 +17,10 @@ export const getMajor = async () => {
 };
 
 // 자격증 조회
-export const getCertificates = async ({ data }) => {
+export const getCertificates = async ({ majorId }: { majorId: number }) => {
   const res = await api.get("/certificates", {
     params: {
-      majorId: data,
+      majorId,
     },
   });
   return res.data;
