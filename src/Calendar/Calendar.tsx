@@ -8,7 +8,7 @@ function MyCalendar() {
   return (
     <div className="flex justify-center p-8">
       <Calendar
-        // onChange={setValue}
+        onChange={setValue}
         value={value}
         locale="en-US"
         // calendarType="US"
@@ -16,7 +16,7 @@ function MyCalendar() {
         prevLabel="<"
         next2Label={null}
         prev2Label={null}
-        formatShortWeekday={(locale, date) =>
+        formatShortWeekday={(_, date) =>
           ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][date.getDay()]
         }
       />

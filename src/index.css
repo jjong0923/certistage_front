@@ -1,4 +1,3 @@
-
 /* index.css */
 @import "tailwindcss";
 
@@ -8,6 +7,7 @@ div.react-calendar {
   @apply w-[600px] rounded-3xl bg-[#E7F0FF] p-6 shadow-lg;
   font-family: sans-serif;
 
+  max-width: 550px;
   height: 520px;
   display: flex;
   flex-direction: column;
@@ -116,5 +116,3 @@ div .react-calendar__navigation button {
   -ms-overflow-style: none; /* IE, Edge */
   scrollbar-width: none; /* Firefox */
 }
-
-

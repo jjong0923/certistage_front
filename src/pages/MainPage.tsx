@@ -84,7 +84,7 @@ function MainPage() {
   return (
     <div>
       <Header />
-      <div className="mt-10 flex justify-center">
+      <div className="relative mt-10 flex justify-center">
         <select
           name="major"
           defaultValue=""
@@ -117,7 +117,7 @@ function MainPage() {
       {/* 챗봇 토글 */}
       <FloatingButton
         onClick={() => {
-          setToggle(false);
+          setToggle(!toggle);
         }}
       />
       {/* 교재 추천 */}
