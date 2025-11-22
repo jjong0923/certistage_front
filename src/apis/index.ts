@@ -12,7 +12,6 @@ export const api = axios.create({
 
 // 전공 목록 조회
 export const getMajor = async () => {
-
   const res = await api.get("/majors");
 
   return res.data;
@@ -52,7 +51,7 @@ export const getExams = async () =>
       //   jmCd,
       //   page,
       //   size,
-      // }
+      //
     );
     return res.data;
   };
