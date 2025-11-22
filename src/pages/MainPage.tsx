@@ -15,25 +15,7 @@ import {
   getDateWeight,
   filterByMonth,
 } from "../utils/date";
-import type { DailyExams, MajorOption } from "../types";
-
-interface MajorOption {
-  id: number;
-  name: string;
-}
-
-interface ExamItem {
-  category: "major" | "pro" | "tech";
-  subject?: string;
-  name?: string;
-  id?: number;
-  nextExamDate?: string;
-}
-
-interface DailyExams {
-  date: string;
-  items: ExamItem[];
-}
+import type { DailyExams, MajorOption } from "../types/index";
 
 function MainPage() {
   const [toggle, setToggle] = useState(true);

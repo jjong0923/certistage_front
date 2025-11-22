@@ -1,7 +1,7 @@
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { getCalendarMonth } from "../apis";
-import { useEffect, useState } from "react";
+// import { getCalendarMonth } from "../apis";
+import { useState } from "react";
 
 interface CalendarEvent {
   category: string;
