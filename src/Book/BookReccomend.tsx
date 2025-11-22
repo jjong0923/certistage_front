@@ -12,6 +12,14 @@ type Book = {
     salesRank: number;
 };
 
+const IMAGE_URLS: Record<number, string> = {
+    1: "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791189357573.jpg",
+    2: "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791140716142.jpg",
+    3: "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791136030863.jpg",
+    4: "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791136038876.jpg",
+};
+
+
 const API_BASE_URL = "https://certistage-production.up.railway.app";
 
 async function fetchBooks(certificateId: number): Promise<Book[]> {
@@ -66,18 +74,18 @@ function BookReccomend() {
     }
 
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center mb-[50px]">
 
-            <div className=" mt-[30px] w-[1100px] min-w-[800px] rounded-[5px] shadow-[0px_4px_2.6px_0_rgba(0,0,0,0.25)]">
+            <div className=" mt-[30px] w-[1200px] min-w-[820px] rounded-[5px] shadow-[0px_4px_2.6px_0_rgba(0,0,0,0.25)]">
                 <div className="shrink-0 pt-[20px] pl-[30px] mb-[10px] font-semibold">
                     합격 스테이지로 가는 책
                 </div>
 
                 <div className="flex overflow-hidden pl-[80px]">
-                    {books.map((book) => (
+                    {books.map((book, index) => (
                         <BookCard
                             key={book.id}
-                            image={book.thumbnailUrl}
+                            image={IMAGE_URLS[index + 1] ?? null}
                             title={book.title}
                             author={book.author}
                             price={book.price}
@@ -85,6 +93,7 @@ function BookReccomend() {
                         />
                     ))}
                 </div>
+
             </div>
         </div>
     );

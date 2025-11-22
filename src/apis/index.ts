@@ -20,7 +20,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-
 // 전공 목록 조회
 export const getMajor = async () => {
   const res = await api.get("/majors");
@@ -39,7 +38,6 @@ export const getCertificates = async ({ majorId }: { majorId: number }) => {
 };
 
 // 국가 시험 일정 조회
-
 export const getExams = async ({ size }: { size: number }) =>
 //   {
 //   year,
