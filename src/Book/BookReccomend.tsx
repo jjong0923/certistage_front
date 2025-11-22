@@ -51,34 +51,39 @@ function BookReccomend() {
 
     if (loading) {
         return (
-            <div className="ml-[15%] mt-[30px] w-[1100px] min-w-[800px] rounded-[5px] shadow-[0px_4px_2.6px_0_rgba(0,0,0,0.25)]">
-                <div className="shrink-0 pt-[20px] pl-[30px] font-semibold">
-                    합격 스테이지로 가는 책
+            <div className="flex justify-center">
+                <div className=" mt-[30px] w-[1100px] min-w-[800px] rounded-[5px] shadow-[0px_4px_2.6px_0_rgba(0,0,0,0.25)]">
+                    <div className="shrink-0 pt-[20px] pl-[30px] font-semibold">
+                        합격 스테이지로 가는 책
+                    </div>
+                    <p className="px-[30px] py-[20px] text-sm text-gray-500">
+                        추천 책 불러오는 중...
+                    </p>
                 </div>
-                <p className="px-[30px] py-[20px] text-sm text-gray-500">
-                    추천 책 불러오는 중...
-                </p>
             </div>
         );
     }
 
     return (
-        <div className="ml-[15%] mt-[30px] w-[1100px] min-w-[800px] rounded-[5px] shadow-[0px_4px_2.6px_0_rgba(0,0,0,0.25)]">
-            <div className="shrink-0 pt-[20px] pl-[30px] mb-[10px] font-semibold">
-                합격 스테이지로 가는 책
-            </div>
+        <div className="flex justify-center">
 
-            <div className="flex overflow-hidden pl-[80px]">
-                {books.map((book) => (
-                    <BookCard
-                        key={book.id}
-                        image={book.thumbnailUrl}
-                        title={book.title}
-                        author={book.author}
-                        price={book.price}
-                        purchaseUrl={book.purchaseUrl}
-                    />
-                ))}
+            <div className=" mt-[30px] w-[1100px] min-w-[800px] rounded-[5px] shadow-[0px_4px_2.6px_0_rgba(0,0,0,0.25)]">
+                <div className="shrink-0 pt-[20px] pl-[30px] mb-[10px] font-semibold">
+                    합격 스테이지로 가는 책
+                </div>
+
+                <div className="flex overflow-hidden pl-[80px]">
+                    {books.map((book) => (
+                        <BookCard
+                            key={book.id}
+                            image={book.thumbnailUrl}
+                            title={book.title}
+                            author={book.author}
+                            price={book.price}
+                            purchaseUrl={book.purchaseUrl}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );
