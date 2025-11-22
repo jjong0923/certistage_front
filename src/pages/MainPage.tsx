@@ -26,12 +26,6 @@ interface DailyExams {
   items: ExamItem[];
 }
 
-interface Major {
-  id: number;
-  name: string;
-  description: string;
-}
-
 function MainPage() {
   const [toggle, setToggle] = useState(true);
   const [options, setOptions] = useState<MajorOption[]>([]);
@@ -98,7 +92,6 @@ function MainPage() {
       ],
     },
   ];
-
 
   const filterByMonth = (dataList: DailyExams[]) => {
     const currentMonth = currentDate.getMonth() + 1; // 현재 달력의 월 (1~12)
@@ -185,7 +178,7 @@ function MainPage() {
       }
     };
 
-    fetchData()
+    fetchData();
   }, []);
 
   const allExams = [...filteredMajors, ...filteredMockExams].sort((a, b) => {
@@ -198,11 +191,6 @@ function MainPage() {
       <div className="relative mt-10 flex justify-center">
         <select
           name="major"
-          value={selectedMajorId}
-          onChange={(e) => {
-            const value = e.target.value;
-            setSelectedMajorId(value === "" ? "" : Number(value));
-          }}
           defaultValue=""
           className="h-10 w-[650px] rounded border border-[#023685] pl-[30px]"
           onChange={handleChange}
@@ -214,7 +202,6 @@ function MainPage() {
           {options.map((item) => (
             <option key={item.id} value={item.id}>
               {item.name}
-
             </option>
           ))}
         </select>
