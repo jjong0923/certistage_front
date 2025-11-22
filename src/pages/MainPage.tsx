@@ -63,8 +63,9 @@ function MainPage() {
   );
 
   const calendarEvents = [...majorExams, ...generalExams].flatMap(
-    (group) => group.items,
+    (group) => group.items ?? [],
   );
+
   return (
     <div>
       <Header />
