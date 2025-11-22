@@ -18,6 +18,12 @@ interface DailyExams {
   items: ExamItem[];
 }
 
+interface Major {
+  id: number;
+  name: string;
+  description: string;
+}
+
 function MainPage() {
   const [toggle, setToggle] = useState(true);
   const mockExams: DailyExams[] = [
@@ -82,13 +88,21 @@ function MainPage() {
     },
   ];
 
+  const [majors, setMajors] = useState<Major[]>([]);
+  const [selectedMajorId, setSelectedMajorId] = useState<number | "">("");
+
   useEffect(() => {
-    try {
-      const data = getMajor();
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
+    const loadMajors = async () => {
+      try {
+        const data = await getMajor();
+        console.log("전공 목록:", data);
+        setMajors(data);
+      } catch (error) {
+        console.error("전공 목록 조회 실패:", error);
+      }
+    };
+
+    loadMajors();
   }, []);
 
   return (
@@ -97,14 +111,22 @@ function MainPage() {
       <div className="relative mt-10 flex justify-center">
         <select
           name="major"
+          value={selectedMajorId}
+          onChange={(e) => {
+            const value = e.target.value;
+            setSelectedMajorId(value === "" ? "" : Number(value));
+          }}
           defaultValue=""
           className="h-10 w-[650px] rounded border border-[#023685] pl-[30px]"
         >
           <option value="" disabled>
             전공을 선택해주세요
           </option>
-          <option value="컴퓨터공학과">컴퓨터공학과</option>
-          <option value="경영학과">경영학과</option>
+          {majors.map((major) => (
+            <option key={major.id} value={major.id}>
+              {major.name}
+            </option>
+          ))}
         </select>
       </div>
       {/* 콘텐츠 */}
