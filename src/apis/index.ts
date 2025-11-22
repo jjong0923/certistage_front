@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://certistage-production.up.railway.app/";
+const BASE_URL = "https://certistage-production.up.railway.app/api";
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -8,11 +8,22 @@ export const api = axios.create({
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*", // 모든 출처 허용
   },
+  withCredentials: true,
+});
+
+//세션 아이디 
+api.interceptors.request.use((config) => {
+  const sessionId = localStorage.getItem("certi-session-id");
+  if (sessionId) {
+    config.headers["X-Session-Id"] = sessionId;
+  }
+  return config;
 });
 
 // 전공 목록 조회
 export const getMajor = async () => {
-  const res = await api.get("api/majors");
+  const res = await api.get("/majors");
+
   return res.data;
 };
 
@@ -23,5 +34,46 @@ export const getCertificates = async ({ majorId }: { majorId: number }) => {
       majorId,
     },
   });
+  return res.data;
+};
+
+// 국가 시험 일정 조회
+export const getExams = async ({ size }: { size: number }) =>
+//   {
+//   year,
+//   qualgbCd,
+//   jmCd,
+//   page,
+// size,
+// }: {
+//   year: number;
+//   qualgbCd: string;
+//   jmCd: string;
+//   page: number;
+// size: number;
+// }
+{
+  const res = await api.get("/exams", {
+    params: {
+      size,
+    },
+    //   year,
+    //   qualgbCd,
+    //   jmCd,
+    //   page,
+    // size,
+  });
+  return res.data;
+};
+
+// 자격증 월별 일정 조회
+export const getCalendarMonth = async ({
+  year,
+  month,
+}: {
+  year: number;
+  month: number;
+}) => {
+  const res = await api.get(`/calendar/month/${year}/${month}`);
   return res.data;
 };

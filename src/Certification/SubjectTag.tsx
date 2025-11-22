@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-type subjectType = "pro" | "tech";
+type subjectType = "major" | "pro" | "tech";
 
 interface SubjectTagProps {
   children: ReactNode;
@@ -9,6 +9,7 @@ interface SubjectTagProps {
 
 function SubjectTag({ children, type }: SubjectTagProps) {
   const colorStyles: Record<subjectType, string> = {
+    major: "border-[#26D48A] bg-[rgba(38,212,138,0.1)]",
     pro: "border-[#FF8FB8] bg-[rgba(255,143,184,0.1)]",
     tech: "border-[#4D9FFF] bg-[rgba(77,159,255,0.1)]",
   };
