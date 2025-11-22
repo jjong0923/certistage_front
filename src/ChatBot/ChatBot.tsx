@@ -138,7 +138,7 @@ function ChatBot({ onClose }: ChatBotProps) {
                     backgroundImage: `url(${chatBg})`,
                     backgroundSize: "300px 300px",
                 }}
-                className="relative flex h-[460px] flex-col rounded-b bg-cover bg-center bg-no-repeat"
+                className="relative flex h-[600px] flex-col rounded-b bg-cover bg-center bg-no-repeat"
             >
                 <div className="flex-1 space-y-2 overflow-y-auto px-4 py-10">
                     {messages.map((msg) => (
