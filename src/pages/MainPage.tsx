@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Calendar from "../Calendar/Calendar";
 import CertificationCard from "../Certification/CertificationCard";
 import CertificationTitle from "../Certification/CertificationTitle";
-import Header from "../Shared/Hedaer";
+import Header from "../Shared/Header";
 import ChatBot from "../ChatBot/ChatBot";
 import BookReccomend from "../Book/BookReccomend";
 import FloatingButton from "../Shared/FloatingButton";

@@ -10,7 +10,7 @@ export interface ExamItem {
 
 export interface DailyExams {
   date: string;
-  items: ExamItem[];
+  items?: ExamItem[];
 }
 
 export interface RawMajorExam {

@@ -1,13 +1,12 @@
 import CertificationTag from "./CertificationTag";
 import SubjectTag from "./SubjectTag";
-import type { DailyExams, Category } from "../types";
+import type { DailyExams, Category } from "../types/index";
 
 interface CertificationCardProps {
-  key: string;
   data: DailyExams;
 }
 
-function CertificationCard({ key, data }: CertificationCardProps) {
+function CertificationCard({ data }: CertificationCardProps) {
   const categoryName: Record<Category, string> = {
     major: "전공",
     pro: "전문 자격",
@@ -20,10 +19,7 @@ function CertificationCard({ key, data }: CertificationCardProps) {
     tech: "#4D9FFF",
   };
   return (
-    <div
-      className="flex flex-col gap-3 border-b-2 border-[#d9d9d9] pb-4"
-      key={key}
-    >
+    <div className="flex flex-col gap-3 border-b-2 border-[#d9d9d9] pb-4">
       <h3 className="text-2xl font-semibold text-[#0F172A]">{data.date}</h3>
       {(["major", "pro", "tech"] as const).map((type) => {
         const safeItems = data.items || [];
