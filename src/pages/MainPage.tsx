@@ -26,6 +26,37 @@ interface DailyExams {
   items: ExamItem[];
 }
 
+const mapCategory = (qualgbCd: string): "tech" | "pro" | null => {
+  switch (qualgbCd) {
+    case "T":
+      return "tech"; // 국가기술자격
+    case "S":
+      return "pro"; // 국가전문자격
+    default:
+      return null; // 과정평가형(C), 일학습병행(W) 제외
+  }
+};
+
+const normalizeExams = (rawData: any[]) => {
+  if (!rawData) return [];
+
+  return rawData
+    .map((item) => {
+      const category = mapCategory(item.qualgbCd);
+      if (!category) return null; // tech/pro만 유지
+
+      const examDate = item.pracExamStartDt || item.docExamStartDt;
+      if (!examDate) return null;
+
+      return {
+        category,
+        name: item.description,
+        nextExamDate: examDate,
+      };
+    })
+    .filter(Boolean) as ExamItem[];
+};
+
 function MainPage() {
   const [toggle, setToggle] = useState(true);
   const [options, setOptions] = useState<MajorOption[]>([]);
@@ -95,6 +126,11 @@ function MainPage() {
     },
   ];
 
+  const parseDateString = (dateStr: string) => {
+    if (!dateStr || dateStr.length !== 8) return "";
+    return `${dateStr.substring(0, 4)}-${dateStr.substring(4, 6)}-${dateStr.substring(6, 8)}`;
+  };
+
   const formatDateWithDay = (dateStr: string) => {
     const date = new Date(dateStr);
     const month = date.getMonth() + 1;
@@ -119,97 +155,95 @@ function MainPage() {
     });
   };
 
+  const adaptGeneralExamData = (apiResponse: any): ExamItem[] => {
+    // body.items 배열에 안전하게 접근
+    const items = apiResponse?.body?.items;
+    if (!items || !Array.isArray(items)) return [];
+
+    const adaptedList: ExamItem[] = [];
+
+    items.forEach((item: any, index: number) => {
+      // 카테고리 결정 (T: tech, S: pro 등)
+      const category = item.qualgbCd === "T" ? "tech" : "pro";
+
+      const fullDesc = item.description || "";
+
+      // 1) 필기 시험(doc) 정보가 있고 날짜가 존재하면 추가
+      if (item.docExamStartDt) {
+        const dateStr = parseDateString(item.docExamStartDt);
+        if (dateStr) {
+          adaptedList.push({
+            id: Number(item.implSeq) * 1000 + index * 10 + 1, // 고유 ID 생성
+            category: category,
+            // 제목 예: "정보처리기사 [필기]"
+            name: `${fullDesc} [필기]`,
+            subject: item.qualgbNm,
+            nextExamDate: dateStr,
+          });
+        }
+      }
+
+      // 2) 실기 시험(prac) 정보가 있고 날짜가 존재하면 추가
+      if (item.pracExamStartDt) {
+        const dateStr = parseDateString(item.pracExamStartDt);
+        if (dateStr) {
+          adaptedList.push({
+            id: Number(item.implSeq) * 1000 + index * 10 + 2,
+            category: category,
+            name: `${fullDesc} [실기]`,
+            subject: item.qualgbNm,
+            nextExamDate: dateStr,
+          });
+        }
+      }
+    });
+
+    return adaptedList;
+  };
+
   const transformExamData = (
-    rawData: any[],
+    rawData: ExamItem[],
     defaultCategory?: "major" | "pro" | "tech",
   ) => {
     if (!rawData || rawData.length === 0) return [];
 
-    // 1. 원본 데이터 날짜순 정렬 (API 데이터 내 날짜 기준)
     const sortedData = [...rawData].sort(
       (a: any, b: any) =>
         new Date(a.nextExamDate).getTime() - new Date(b.nextExamDate).getTime(),
     );
 
-    // 2. 날짜별 그룹화
     const groupedMap = new Map<string, ExamItem[]>();
 
-    sortedData.forEach((item: any) => {
+    sortedData.forEach((item) => {
       if (!item.nextExamDate) return;
-
       const dateKey = formatDateWithDay(item.nextExamDate);
-      // 카테고리가 없으면 defaultCategory 사용 (전공은 'major', 일반은 데이터 내 'category' 등)
+
       const category = item.category || defaultCategory || "tech";
 
       const newItem: ExamItem = {
         ...item,
         category: category,
+        // 화면에는 subject나 name 중 있는 것을 표시
+        subject: item.subject || item.name,
       };
 
       if (!groupedMap.has(dateKey)) {
         groupedMap.set(dateKey, []);
       }
-      groupedMap.get(dateKey)?.push(newItem);
+      groupedMap.get(dateKey)!.push(newItem);
     });
 
-    // 3. Map을 배열로 변환
     return Array.from(groupedMap.entries()).map(([date, items]) => ({
       date,
       items,
     }));
   };
 
-  // const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   const majorId = Number(e.target.value);
-
-  //   try {
-  //     // API 호출
-  //     const rawData = await getCertificates({ majorId });
-
-  //     rawData.sort(
-  //       (a: any, b: any) =>
-  //         new Date(a.nextExamDate).getTime() -
-  //         new Date(b.nextExamDate).getTime(),
-  //     );
-
-  //     // 데이터 변환: 날짜별로 그룹화 (Grouping)
-  //     const groupedMap = new Map<string, ExamItem[]>();
-
-  //     rawData.forEach((item: any) => {
-  //       // 날짜 문자열 변환 (예: "2025-09-18" -> "9.18(목)")
-  //       const dateKey = formatDateWithDay(item.nextExamDate);
-
-  //       // category: "major" 강제 주입
-  //       const newItem: ExamItem = {
-  //         ...item,
-  //         category: "major",
-  //       };
-
-  //       // Map에 같은 날짜끼리 배열로 묶기
-  //       if (!groupedMap.has(dateKey)) {
-  //         groupedMap.set(dateKey, []);
-  //       }
-  //       groupedMap.get(dateKey)?.push(newItem);
-  //     });
-
-  //     // Map을 배열 형태로 변환하여 State 업데이트
-  //     // 결과 예시: [{ date: "9.18(목)", items: [...] }, ...]
-  //     const transformedData: DailyExams[] = Array.from(groupedMap.entries())
-  //       .map(([date, items]) => ({ date, items }))
-  //       .sort((a, b) => a.date.localeCompare(b.date)); // 날짜순 정렬 (선택)
-
-  //     setMajors(transformedData);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const majorId = Number(e.target.value);
 
     try {
       const rawData = await getCertificates({ majorId });
-      // 전공 데이터는 category='major'로 강제 지정
       const transformedData = transformExamData(rawData, "major");
       setMajorExams(transformedData);
     } catch (error) {
@@ -223,8 +257,9 @@ function MainPage() {
         const majorOptions = await getMajor();
         setOptions(majorOptions);
 
-        const examData = await getExams();
-        const processedExams = transformExamData(examData);
+        const apiResponse = await getExams({ size: 10 });
+        const flatList = adaptGeneralExamData(apiResponse);
+        const processedExams = transformExamData(flatList);
         setGeneralExams(processedExams);
       } catch (error) {
         console.log(error);
@@ -241,6 +276,9 @@ function MainPage() {
     (a, b) => getDateWeight(a.date) - getDateWeight(b.date),
   );
 
+  const calendarEvents = [...majorExams, ...generalExams].flatMap(
+    (group) => group.items,
+  );
   return (
     <div>
       <Header />
@@ -248,10 +286,15 @@ function MainPage() {
         <select
           name="major"
           defaultValue=""
-          className="h-10 w-[650px] rounded border border-[#023685] pl-[30px]"
+          className="h-12 w-[650px] appearance-none rounded-xl border border-[#023685] bg-white pr-10 pl-4 text-[15px] text-gray-700 shadow-sm transition-all outline-none hover:border-[#0450d4] focus:border-[#0450d4]"
           onChange={handleChange}
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23023685' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "right 12px center",
+          }}
         >
-          <option value="" disabled>
+          <option value="" disabled className="text-gray-400">
             전공을 선택해주세요
           </option>
 
@@ -265,7 +308,10 @@ function MainPage() {
       {/* 콘텐츠 */}
       <div className="mt-8 flex items-center justify-center">
         {toggle ? (
-          <Calendar onDateChange={(date) => setCurrentDate(date)} />
+          <Calendar
+            onDateChange={(date) => setCurrentDate(date)}
+            events={calendarEvents}
+          />
         ) : (
           <div className="p-8">
             <ChatBot onClose={() => setToggle(true)} />
@@ -278,7 +324,7 @@ function MainPage() {
             <CertificationTitle type="pro" />
             <CertificationTitle type="tech" />
           </div>
-          <div className="scroll-hide scroll-fade flex h-[570px] flex-col gap-6 overflow-y-scroll py-4">
+          <div className="scroll-hide scroll-fade flex h-[570px] w-[400px] flex-col gap-6 overflow-y-scroll py-4">
             {allExams.length > 0 ? (
               allExams.map((item, index) => (
                 // 데이터 소스에 따라 key가 겹칠 수 있으므로 index 활용

@@ -1,23 +1,74 @@
-// import { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { getCalendarMonth } from "../apis";
 import { useEffect, useState } from "react";
 
-interface ScheduleItem {
-  date: string;
-  title: string;
-  examType: string;
-  description: string;
+interface CalendarEvent {
+  category: string;
+  subject?: string;
+  name?: string;
+  nextExamDate?: string; // YYYY-MM-DD
 }
+
+// interface ScheduleItem {
+//   date: string;
+//   title: string;
+//   examType: string;
+//   description: string;
+// }
 
 interface MyCalendarProps {
   onDateChange?: (date: Date) => void;
+  events?: CalendarEvent[];
 }
 
-function MyCalendar({ onDateChange }: MyCalendarProps) {
+function MyCalendar({ onDateChange, events = [] }: MyCalendarProps) {
   const [activeDate, setActiveDate] = useState<Date>(new Date());
-  const [scheduleData, setScheduleData] = useState<ScheduleItem[] | null>(null);
+
+  // const [scheduleData, setScheduleData] = useState<ScheduleItem[] | null>(null);
+
+  const formatDateToYMD = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const tileContent = ({ date, view }: { date: Date; view: string }) => {
+    // 월 달력 보기일 때만 내용 표시
+    if (view !== "month") return null;
+
+    const dateStr = formatDateToYMD(date);
+
+    // 부모로부터 받은 events 중에서 해당 날짜와 일치하는 일정 찾기
+    const schedules = events.filter((item) => item.nextExamDate === dateStr);
+
+    if (schedules.length === 0) return null;
+
+    return (
+      <div className="mt-1 flex w-full flex-col items-start gap-1">
+        {schedules.map((schedule, idx) => {
+          const title = schedule.subject || schedule.name || "";
+
+          return (
+            <div
+              key={idx}
+              className={`w-full truncate rounded px-1 text-left text-[8px] leading-tight ${
+                schedule.category === "major"
+                  ? "bg-green-100 text-green-700" // 전공 (녹색)
+                  : schedule.category === "pro"
+                    ? "bg-pink-100 text-pink-700" // 전문 (분홍)
+                    : "bg-blue-100 text-blue-700" // 기술 (파랑)
+              }`}
+              title={title}
+            >
+              {title}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
 
   useEffect(() => {
     const fetchMonthData = async () => {
@@ -37,47 +88,13 @@ function MyCalendar({ onDateChange }: MyCalendarProps) {
     fetchMonthData();
   }, [activeDate]);
 
-  const formatDateToYMD = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}${month}${day}`;
-  };
-
-  const tileContent = ({ date, view }: { date: Date; view: string }) => {
-    // 월 달력이 아니거나, 데이터가 아직 없으면 아무것도 안 그림
-    if (view !== "month" || !scheduleData) return null;
-
-    // 현재 렌더링 중인 날짜를 문자열로 변환
-    const dateStr = formatDateToYMD(date);
-
-    // 해당 날짜에 맞는 일정 찾기
-    const schedules = scheduleData.filter((item) => item.date === dateStr);
-
-    if (schedules.length === 0) return null;
-
-    return (
-      <div className="mt-1 flex flex-col items-start gap-1">
-        {schedules.map((schedule, idx) => (
-          <div
-            key={idx}
-            className={`w-full rounded px-1 text-left text-[8px] leading-tight break-words whitespace-normal ${
-              schedule.title.includes("시작")
-                ? "bg-blue-100 text-blue-700" // 시작일 스타일
-                : "bg-red-100 text-red-700" // 종료일 스타일
-            }`}
-          >
-            {schedule.description}
-          </div>
-        ))}
-      </div>
-    );
-  };
-
   return (
     <div className="flex justify-center p-8">
       <Calendar
         locale="en-US"
+        formatMonthYear={(locale, date) =>
+          `${date.getFullYear()}.${date.getMonth() + 1}`
+        }
         nextLabel=">"
         prevLabel="<"
         next2Label={null}

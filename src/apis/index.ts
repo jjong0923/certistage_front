@@ -23,7 +23,6 @@ api.interceptors.request.use((config) => {
 
 // 전공 목록 조회
 export const getMajor = async () => {
-
   const res = await api.get("/majors");
 
   return res.data;
@@ -40,31 +39,32 @@ export const getCertificates = async ({ majorId }: { majorId: number }) => {
 };
 
 // 국가 시험 일정 조회
-export const getExams = async () =>
+
+export const getExams = async ({ size }: { size: number }) =>
 //   {
 //   year,
 //   qualgbCd,
 //   jmCd,
 //   page,
-//   size,
+// size,
 // }: {
 //   year: number;
 //   qualgbCd: string;
 //   jmCd: string;
 //   page: number;
-//   size: number;
+// size: number;
 // }
 {
-  const res = await api.get(
-    "/exams",
-    //   {
+  const res = await api.get("/exams", {
+    params: {
+      size,
+    },
     //   year,
     //   qualgbCd,
     //   jmCd,
     //   page,
-    //   size,
-    // }
-  );
+    // size,
+  });
   return res.data;
 };
 

@@ -8,9 +8,10 @@ div .react-calendar {
   font-family: sans-serif;
 
   max-width: 550px;
-  height: 520px;
-  height: auto;
-  min-height: 600px;
+  height: 650px;
+  /* min-height: 600px;
+  height: 520px; */
+  /* height: auto; */
 
   display: flex;
   flex-direction: column;
@@ -23,7 +24,7 @@ div .react-calendar {
 div .react-calendar__month-view__weekdays {
   @apply text-center text-sm font-semibold text-gray-700;
   border-bottom: 1px solid #afafaf;
-  height: 48px;
+  height: 60px;
   display: flex;
   align-items: center;
 }
@@ -66,7 +67,7 @@ div .react-calendar__tile--now abbr {
   color: #1d4ed8;
   font-weight: bold;
 
-  padding: 4px 4px;
+  padding: 5px;
   border-radius: 50%;
 }
 
@@ -88,6 +89,8 @@ div .react-calendar__navigation {
 
 /* 네비게이션 버튼 */
 div .react-calendar__navigation button.react-calendar__navigation__label {
+  font-size: 1.75rem;
+  font-weight: 600;
   background: none !important;
   box-shadow: none;
 }
