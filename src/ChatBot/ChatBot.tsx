@@ -9,8 +9,6 @@ import {
     type MouseEvent,
 } from "react";
 
-const API_BASE_URL = "https://certistage-production.up.railway.app";
-
 type ChatBotProps = {
     onClose: () => void;
 };
@@ -23,21 +21,63 @@ type Message = {
 
 type ChatRequest = {
     question: string;
-}
+};
 
 type ChatResponse = {
     answer: string;
-}
-async function fetchChatbot(question: string): Promise<ChatResponse> {
-    const res = await api.post<ChatResponse>("/api/chat", {
-        question,
-    });
+};
 
+type HistoryMessage = {
+    role: "user" | "assistant";
+    content: string;
+};
+
+// --- 세션 ID 관리 ---
+const SESSION_STORAGE_KEY = "certi-chat-session";
+
+function getOrCreateSessionId(): string {
+    if (typeof window === "undefined") return "";
+
+    let id = localStorage.getItem(SESSION_STORAGE_KEY);
+    if (!id) {
+        // 랜덤 세션 ID 생성
+        if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+            id = crypto.randomUUID();
+        } else {
+            id =
+                Date.now().toString(36) +
+                "-" +
+                Math.random().toString(36).substring(2, 10);
+        }
+        localStorage.setItem(SESSION_STORAGE_KEY, id);
+    }
+    return id;
+}
+
+// --- API 함수들 ---
+async function fetchChatbot(question: string): Promise<ChatResponse> {
+    const sessionId = getOrCreateSessionId();
+
+    const res = await api.post<ChatResponse>(
+        "/chat",
+        { question },
+        {
+            headers: {
+                "X-Session-Id": sessionId,
+            },
+        }
+    );
     return res.data;
 }
 
-async function fetchChatHistory() {
-    const res = await api.get("/api/chat");
+async function fetchChatHistory(): Promise<HistoryMessage[]> {
+    const sessionId = getOrCreateSessionId();
+
+    const res = await api.get<HistoryMessage[]>("/chat/history", {
+        headers: {
+            "X-Session-Id": sessionId,
+        },
+    });
     return res.data;
 }
 
@@ -45,12 +85,14 @@ function ChatBot({ onClose }: ChatBotProps) {
     const [input, setInput] = useState("");
     const [messages, setMessages] = useState<Message[]>([]);
 
+    // 최초 로딩 시 히스토리 가져오기
     useEffect(() => {
         const loadHistory = async () => {
             try {
                 const history = await fetchChatHistory();
+                console.log("chat history:", history);
 
-                const mapped = history.map((item: any, index: number) => ({
+                const mapped: Message[] = history.map((item, index) => ({
                     id: Date.now() + index,
                     text: item.content,
                     sender: item.role === "user" ? "user" : "bot",
@@ -64,7 +106,6 @@ function ChatBot({ onClose }: ChatBotProps) {
 
         loadHistory();
     }, []);
-
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value);
@@ -115,9 +156,8 @@ function ChatBot({ onClose }: ChatBotProps) {
         e.preventDefault();
         sendMessage();
     };
-
     return (
-        <div className="h-[680px] w-[550px] rounded-3xl shadow-[0_4px_5px_2px_rgba(0,0,0,0.15)]">
+        <div className="h-[640px] w-[530px] rounded-3xl shadow-[0_4px_5px_2px_rgba(0,0,0,0.15)]">
             <header className="flex h-[90px] items-start justify-between rounded bg-[#E8F1FF] pt-[10px] pr-[15px] pl-[15px] shadow-[0_4px_5px_2px_rgba(0,0,0,0.15)]">
                 <div>
                     <p className="text-2xl font-semibold">써티</p>
@@ -138,9 +178,9 @@ function ChatBot({ onClose }: ChatBotProps) {
                     backgroundImage: `url(${chatBg})`,
                     backgroundSize: "300px 300px",
                 }}
-                className="relative flex h-[600px] flex-col rounded-b bg-cover bg-center bg-no-repeat"
+                className="relative flex h-[580px] flex-col rounded-b bg-cover bg-center bg-no-repeat"
             >
-                <div className="flex-1 space-y-2 overflow-y-auto px-4 py-10">
+                <div className="flex-1 space-y-3 overflow-y-auto px-4 py-10">
                     {messages.map((msg) => (
                         <div
                             key={msg.id}
@@ -163,7 +203,7 @@ function ChatBot({ onClose }: ChatBotProps) {
                         </div>
                     ))}
                 </div>
-
+                <div></div>
                 <div className="relative bottom-11 left-0 w-full px-4">
                     <div className="rounded-full bg-white px-4 py-3 shadow-[0_2px_4px_rgba(0,0,0,0.1)]">
                         <div className="relative w-full">
@@ -179,7 +219,11 @@ function ChatBot({ onClose }: ChatBotProps) {
                                 onClick={handleClick}
                                 className="absolute top-1/2 right-3 -translate-y-1/2"
                             >
-                                <img src={sendBtn} alt="send" className="h-6 w-6" />
+                                <img
+                                    src={sendBtn}
+                                    alt="send"
+                                    className="h-6 w-6"
+                                />
                             </button>
                         </div>
                     </div>
