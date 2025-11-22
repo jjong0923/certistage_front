@@ -1,4 +1,4 @@
-import type { MajorOption } from "../types";
+import type { MajorOption } from "../types/index";
 
 interface SelectInputProps {
   options: MajorOption[];
