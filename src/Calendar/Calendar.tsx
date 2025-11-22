@@ -55,10 +55,10 @@ function MyCalendar({ onDateChange, events = [] }: MyCalendarProps) {
               key={idx}
               className={`w-full truncate rounded px-1 text-left text-[8px] leading-tight ${
                 schedule.category === "major"
-                  ? "bg-green-100 text-green-700" // 전공 (녹색)
+                  ? "bg-green-100 text-green-700" // 전공
                   : schedule.category === "pro"
-                    ? "bg-pink-100 text-pink-700" // 전문 (분홍)
-                    : "bg-blue-100 text-blue-700" // 기술 (파랑)
+                    ? "bg-pink-100 text-pink-700" // 전문
+                    : "bg-blue-100 text-blue-700" // 기술
               }`}
               title={title}
             >
@@ -70,29 +70,29 @@ function MyCalendar({ onDateChange, events = [] }: MyCalendarProps) {
     );
   };
 
-  useEffect(() => {
-    const fetchMonthData = async () => {
-      try {
-        const year = activeDate.getFullYear();
-        const month = activeDate.getMonth() + 1; // getMonth()는 0부터 시작하므로 +1
+  // useEffect(() => {
+  //   const fetchMonthData = async () => {
+  //     try {
+  //       const year = activeDate.getFullYear();
+  //       const month = activeDate.getMonth() + 1; // getMonth()는 0부터 시작하므로 +1
 
-        console.log(`API 호출: ${year}년 ${month}월 데이터 요청`);
+  //       console.log(`API 호출: ${year}년 ${month}월 데이터 요청`);
 
-        const data = await getCalendarMonth({ year, month });
-        setScheduleData(data);
-      } catch (error) {
-        console.error("데이터 로드 실패", error);
-      }
-    };
+  //       const data = await getCalendarMonth({ year, month });
+  //       // setScheduleData(data);
+  //     } catch (error) {
+  //       console.error("데이터 로드 실패", error);
+  //     }
+  //   };
 
-    fetchMonthData();
-  }, [activeDate]);
+  //   fetchMonthData();
+  // }, [activeDate]);
 
   return (
     <div className="flex justify-center p-8">
       <Calendar
         locale="en-US"
-        formatMonthYear={(locale, date) =>
+        formatMonthYear={(_, date) =>
           `${date.getFullYear()}.${date.getMonth() + 1}`
         }
         nextLabel=">"
@@ -118,7 +118,7 @@ function MyCalendar({ onDateChange, events = [] }: MyCalendarProps) {
 
         activeStartDate={activeDate}
         tileContent={tileContent}
-        tileClassName="h-24 align-top border-b border-r border-gray-100 text-sm" // 칸 높이 확보
+        tileClassName="h-24 align-top border-b border-r border-gray-100 text-sm"
       />
     </div>
   );

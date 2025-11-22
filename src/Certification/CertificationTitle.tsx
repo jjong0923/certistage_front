@@ -1,9 +1,8 @@
-// type label = "pro" | "tech";
+import type { Category } from "../types";
 
 interface CertificationTitleProps {
-  type: "major" | "pro" | "tech";
+  type: Category;
 }
-
 function CertificationTitle({ type }: CertificationTitleProps) {
   const labels = {
     major: "전공",

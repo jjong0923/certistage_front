@@ -1,38 +1,29 @@
 import CertificationTag from "./CertificationTag";
 import SubjectTag from "./SubjectTag";
-
-type categoryType = "major" | "pro" | "tech";
-
-interface ExamItem {
-  category: categoryType;
-  subject?: string;
-  name?: string;
-  id?: number;
-}
-
-interface DailyExams {
-  date: string;
-  items: ExamItem[];
-}
+import type { DailyExams, Category } from "../types";
 
 interface CertificationCardProps {
+  key: string;
   data: DailyExams;
 }
 
-function CertificationCard({ data }: CertificationCardProps) {
-  const categoryName: Record<categoryType, string> = {
+function CertificationCard({ key, data }: CertificationCardProps) {
+  const categoryName: Record<Category, string> = {
     major: "전공",
     pro: "전문 자격",
     tech: "기술 자격",
   };
 
-  const categoryColors: Record<categoryType, string> = {
+  const categoryColors: Record<Category, string> = {
     major: "#26D48A",
     pro: "#FF8FB8",
     tech: "#4D9FFF",
   };
   return (
-    <div className="flex flex-col gap-3 border-b-2 border-[#d9d9d9] pb-4">
+    <div
+      className="flex flex-col gap-3 border-b-2 border-[#d9d9d9] pb-4"
+      key={key}
+    >
       <h3 className="text-2xl font-semibold text-[#0F172A]">{data.date}</h3>
       {(["major", "pro", "tech"] as const).map((type) => {
         const safeItems = data.items || [];
