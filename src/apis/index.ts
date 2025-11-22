@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://certistage-production.up.railway.app/";
+const BASE_URL = "https://certistage-production.up.railway.app/api";
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -12,7 +12,7 @@ export const api = axios.create({
 
 // 전공 목록 조회
 export const getMajor = async () => {
-  const res = await api.get("api/majors");
+  const res = await api.get("/majors");
   return res.data;
 };
 
@@ -21,6 +21,52 @@ export const getCertificates = async ({ majorId }: { majorId: number }) => {
   const res = await api.get("/certificates", {
     params: {
       majorId,
+    },
+  });
+  return res.data;
+};
+
+// 국가 시험 일정 조회
+export const getExams = async (
+//   {
+//   year,
+//   qualgbCd,
+//   jmCd,
+//   page,
+//   size,
+// }: {
+//   year: number;
+//   qualgbCd: string;
+//   jmCd: string;
+//   page: number;
+//   size: number;
+// }
+) => {
+  const res = await api.get("/exams", 
+  //   {
+  //   year,
+  //   qualgbCd,
+  //   jmCd,
+  //   page,
+  //   size,
+  // }
+);
+  return res.data;
+};
+
+// 자격증 월별 일정 조회
+export const getCalendarMonth = async ({
+  year,
+  month,
+  keyword = "",
+}: {
+  year: number;
+  month: number;
+  keyword: string;
+}) => {
+  const res = await api.get(`/calendar/month/${year}/${month}`, {
+    params: {
+      keyword,
     },
   });
   return res.data;

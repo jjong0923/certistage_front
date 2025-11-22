@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import ChatBot from "../ChatBot/ChatBot";
 import BookReccomend from "../Book/BookReccomend";
 import FloatingButton from "../Shared/FloatingButton";
-import { getMajor } from "../apis";
+import { getExams } from "../apis";
 
 interface ExamItem {
   category: "pro" | "tech";
@@ -85,7 +85,7 @@ function MainPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getMajor();
+        const data = await getExams();
         console.log(data);
       } catch (error) {
         console.log(error);
